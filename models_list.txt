@@ -1,0 +1,53 @@
+Model: models/embedding-gecko-001 | Embedding Gecko | Obtain a distributed representation of a text.
+Model: models/gemini-2.5-flash | Gemini 2.5 Flash | Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million tokens, released in June of 2025.
+Model: models/gemini-2.5-pro | Gemini 2.5 Pro | Stable release (June 17th, 2025) of Gemini 2.5 Pro
+Model: models/gemini-2.0-flash-exp | Gemini 2.0 Flash Experimental | Gemini 2.0 Flash Experimental
+Model: models/gemini-2.0-flash | Gemini 2.0 Flash | Gemini 2.0 Flash
+Model: models/gemini-2.0-flash-001 | Gemini 2.0 Flash 001 | Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in January of 2025.
+Model: models/gemini-2.0-flash-lite-001 | Gemini 2.0 Flash-Lite 001 | Stable version of Gemini 2.0 Flash-Lite
+Model: models/gemini-2.0-flash-lite | Gemini 2.0 Flash-Lite | Gemini 2.0 Flash-Lite
+Model: models/gemini-2.0-flash-lite-preview-02-05 | Gemini 2.0 Flash-Lite Preview 02-05 | Preview release (February 5th, 2025) of Gemini 2.0 Flash-Lite
+Model: models/gemini-2.0-flash-lite-preview | Gemini 2.0 Flash-Lite Preview | Preview release (February 5th, 2025) of Gemini 2.0 Flash-Lite
+Model: models/gemini-exp-1206 | Gemini Experimental 1206 | Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+Model: models/gemini-2.5-flash-preview-tts | Gemini 2.5 Flash Preview TTS | Gemini 2.5 Flash Preview TTS
+Model: models/gemini-2.5-pro-preview-tts | Gemini 2.5 Pro Preview TTS | Gemini 2.5 Pro Preview TTS
+Model: models/gemma-3-1b-it | Gemma 3 1B | None
+Model: models/gemma-3-4b-it | Gemma 3 4B | None
+Model: models/gemma-3-12b-it | Gemma 3 12B | None
+Model: models/gemma-3-27b-it | Gemma 3 27B | None
+Model: models/gemma-3n-e4b-it | Gemma 3n E4B | None
+Model: models/gemma-3n-e2b-it | Gemma 3n E2B | None
+Model: models/gemini-flash-latest | Gemini Flash Latest | Latest release of Gemini Flash
+Model: models/gemini-flash-lite-latest | Gemini Flash-Lite Latest | Latest release of Gemini Flash-Lite
+Model: models/gemini-pro-latest | Gemini Pro Latest | Latest release of Gemini Pro
+Model: models/gemini-2.5-flash-lite | Gemini 2.5 Flash-Lite | Stable version of Gemini 2.5 Flash-Lite, released in July of 2025
+Model: models/gemini-2.5-flash-image-preview | Nano Banana | Gemini 2.5 Flash Preview Image
+Model: models/gemini-2.5-flash-image | Nano Banana | Gemini 2.5 Flash Preview Image
+Model: models/gemini-2.5-flash-preview-09-2025 | Gemini 2.5 Flash Preview Sep 2025 | Gemini 2.5 Flash Preview Sep 2025
+Model: models/gemini-2.5-flash-lite-preview-09-2025 | Gemini 2.5 Flash-Lite Preview Sep 2025 | Preview release (Septempber 25th, 2025) of Gemini 2.5 Flash-Lite
+Model: models/gemini-3-pro-preview | Gemini 3 Pro Preview | Gemini 3 Pro Preview
+Model: models/gemini-3-flash-preview | Gemini 3 Flash Preview | Gemini 3 Flash Preview
+Model: models/gemini-3-pro-image-preview | Nano Banana Pro | Gemini 3 Pro Image Preview
+Model: models/nano-banana-pro-preview | Nano Banana Pro | Gemini 3 Pro Image Preview
+Model: models/gemini-robotics-er-1.5-preview | Gemini Robotics-ER 1.5 Preview | Gemini Robotics-ER 1.5 Preview
+Model: models/gemini-2.5-computer-use-preview-10-2025 | Gemini 2.5 Computer Use Preview 10-2025 | Gemini 2.5 Computer Use Preview 10-2025
+Model: models/deep-research-pro-preview-12-2025 | Deep Research Pro Preview (Dec-12-2025) | Preview release (December 12th, 2025) of Deep Research Pro
+Model: models/embedding-001 | Embedding 001 | Obtain a distributed representation of a text.
+Model: models/text-embedding-004 | Text Embedding 004 | Obtain a distributed representation of a text.
+Model: models/gemini-embedding-exp-03-07 | Gemini Embedding Experimental 03-07 | Obtain a distributed representation of a text.
+Model: models/gemini-embedding-exp | Gemini Embedding Experimental | Obtain a distributed representation of a text.
+Model: models/gemini-embedding-001 | Gemini Embedding 001 | Obtain a distributed representation of a text.
+Model: models/aqa | Model that performs Attributed Question Answering. | Model trained to return answers to questions that are grounded in provided sources, along with estimating answerable probability.
+Model: models/imagen-4.0-generate-preview-06-06 | Imagen 4 (Preview) | Vertex served Imagen 4.0 model
+Model: models/imagen-4.0-ultra-generate-preview-06-06 | Imagen 4 Ultra (Preview) | Vertex served Imagen 4.0 ultra model
+Model: models/imagen-4.0-generate-001 | Imagen 4 | Vertex served Imagen 4.0 model
+Model: models/imagen-4.0-ultra-generate-001 | Imagen 4 Ultra | Vertex served Imagen 4.0 ultra model
+Model: models/imagen-4.0-fast-generate-001 | Imagen 4 Fast | Vertex served Imagen 4.0 Fast model
+Model: models/veo-2.0-generate-001 | Veo 2 | Vertex served Veo 2 model. Access to this model requires billing to be enabled on the associated Google Cloud Platform account. Please visit https://console.cloud.google.com/billing to enable it.
+Model: models/veo-3.0-generate-001 | Veo 3 | Veo 3
+Model: models/veo-3.0-fast-generate-001 | Veo 3 fast | Veo 3 fast
+Model: models/veo-3.1-generate-preview | Veo 3.1 | Veo 3.1
+Model: models/veo-3.1-fast-generate-preview | Veo 3.1 fast | Veo 3.1 fast
+Model: models/gemini-2.5-flash-native-audio-latest | Gemini 2.5 Flash Native Audio Latest | Latest release of Gemini 2.5 Flash Native Audio
+Model: models/gemini-2.5-flash-native-audio-preview-09-2025 | Gemini 2.5 Flash Native Audio Preview 09-2025 | Gemini 2.5 Flash Native Audio Preview 09-2025
+Model: models/gemini-2.5-flash-native-audio-preview-12-2025 | Gemini 2.5 Flash Native Audio Preview 12-2025 | Gemini 2.5 Flash Native Audio Preview 12-2025

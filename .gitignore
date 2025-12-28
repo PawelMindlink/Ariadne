@@ -1,0 +1,24 @@
+# --- System/Environment ---
+desktop.ini
+Desktop.ini
+# --- User Data (SENSITIVE - DO NOT COMMIT) ---
+00_Inbox/
+01_Archive/
+02_Database/*.db
+02_Database/*.sqlite
+02_Database/*.db-journal
+
+# --- System/Environment ---
+__pycache__/
+*.pyc
+.env
+.streamlit/secrets.toml
+.DS_Store
+
+# --- Errors & Logs ---
+*.log
+Errors/
+
+# --- IDEs ---
+.vscode/
+.idea/

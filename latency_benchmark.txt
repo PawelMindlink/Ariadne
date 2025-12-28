@@ -1,0 +1,3 @@
+Fast Model (gemini-2.0-flash): 7.2596s
+Thinking Model (gemini-3-flash-preview): 10.4542s
+Cost of Thinking: 3.1946s slower

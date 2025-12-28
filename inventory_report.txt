@@ -1,0 +1,32 @@
+
+# Forensic File Report
+
+## 1. Storage Status
+*   Inbox Total: 102
+    *   Locked PDFs: 0
+    *   Extensions: {'.json': 2, '.ini': 28, '.log': 72}
+*   Archive Total: 9992
+    *   Extensions: {'.json': 4021, '.csv': 3276, '.tcx': 2195, '.pdf': 415, '.ini': 36, '.jpg': 7, '.docx': 11, '.odt': 1, '.png': 7, '.xlsx': 1, '.xml': 22}
+
+## 2. Database Integrity
+*   Total Events Indexed: 13686
+*   Files Tracked in DB: 2285
+*   Ingestion Coverage: ~34 files found in FS match DB records.
+
+## 3. Cleanup Opportunities
+*   Empty Directories: 10
+*   Junk Candidates:
+    *   Zips (Archive): 0
+
+
+Empty Inbox Dirs:
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\Badania\Medical History for Mount Sinai Doctors\Bacterial Culture Tests\Aga
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\Badania\Medical History for Mount Sinai Doctors\Bacterial Culture Tests\Paweł
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\customer_data
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\Dieta\Protestosteron
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\IT_CONSENT_HISTORY
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\IT_DEVICE_AND_CONTENT
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\IT_FORMS
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\IT_GLOBAL_EVENT
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\IT_ORDERS
+- c:\Users\Paweł\Documents\GitHub\Ariadne\00_Inbox\Recepty
