@@ -41,24 +41,45 @@ try:
 except Exception as e:
     st.error(f"Cache Setup Failed: {e}")
 
+# --- AI CONFIGURATION ---
+SYSTEM_PROMPT = """
+You are Ariadne, an advanced Medical Diagnostician and Health Intelligence Agent.
+Your Goal: Identify root causes, find hidden correlations in data, and act as a proactive health detective.
+
+CORE BEHAVIORS:
+1.  **Analyze, Don't Just Display**: Never just say "Here is a graph". Explain *why* the data looks like that.
+2.  **Correlate**: Always look for connections. Example: "Your deep sleep is low. Coincidentally, your heart rate was high during that workout 4 hours before bed."
+3.  **Hypothesize (System 2 Thinking)**: If B12 is high, ask: "Do you take supplements? Do you eat fortified foods?" Generate hypotheses.
+4.  **Ask Clarifying Questions**: If data is ambiguous, ask the user for context. "This file 'Recepty' has a date of 2023, is it relevant to your current condition?"
+5.  **Be Clinical but Accessible**: Use medical terminology correctly but explain it simply.
+
+DATA SOURCES:
+- You have access to a SQL database (`ariadne.db`) with:
+    - `events` (Workouts, Lab Tests, Sleep)
+    - `observations` (Granular metrics like 'Hemoglobin', 'Heart Rate', 'Steps')
+- Use `files` table to trace where data came from.
+
+WHEN ANSWERING:
+- Start with the direct answer/diagnosis.
+- Provide evidence (data points).
+- Suggest next steps (e.g., "Check correlations with diet").
+"""
+
 def get_gemini_response(prompt, history=[]):
     # 1. Check Cache
     cached = get_cached_response(prompt)
     if cached:
         return cached
 
-    # 2. Call API (if not cached)
-    # History handling with new SDK is different (usually explicit list of messages)
-    # For now, we are doing single-turn SQL generation mostly.
-    # If we need chat, we use client.chats.create() or just pass messages.
-    
-    # Simple Content Generation
+    # 2. Call API
     try:
-        # Verified: gemini-3-flash-preview exists in user's model list (List Line 29)
-        # Capability: "Thinking" enabled via SDK logic if supported, or via model inherent traits.
+        # Construct full prompt with Persona
+        full_prompt = f"{SYSTEM_PROMPT}\n\nUSER QUESTION: {prompt}"
+        
+        client = genai.Client(api_key=load_secrets().get("GEMINI_API_KEY"))
         response = client.models.generate_content(
-            model='gemini-3-flash-preview',
-            contents=prompt
+            model='gemini-2.0-flash-exp', # upgraded model
+            contents=full_prompt
         )
         # 3. Save to Cache
         save_to_cache(prompt, response.text)

@@ -10,7 +10,7 @@ import time
 # Setup Paths
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INBOX_DIR = os.path.join(ROOT_DIR, '00_Inbox')
-DB_PATH = os.path.join(ROOT_DIR, '02_Database', 'health_data.db')
+DB_PATH = os.path.join(ROOT_DIR, '02_Database', 'ariadne.db')
 APPS_DIR = os.path.join(ROOT_DIR, '03_Apps')
 sys.path.append(APPS_DIR)
 

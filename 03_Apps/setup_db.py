@@ -3,7 +3,7 @@ import os
 
 # Paths
 DB_FOLDER = os.path.join(os.path.dirname(__file__), '..', '02_Database')
-DB_PATH = os.path.join(DB_FOLDER, 'health_data.db')
+DB_PATH = os.path.join(DB_FOLDER, 'ariadne.db')
 
 def create_schema():
     print(f"Connecting to database at {DB_PATH}...")
