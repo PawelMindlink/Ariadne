@@ -24,6 +24,32 @@ def load_secrets():
              return {}
     return {}
 
+# --- DYNAMIC SCHEMA CONTEXT ---
+def get_schema_context():
+    """Dynamically generates schema context for the LLM."""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Get tables
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = [row[0] for row in cursor.fetchall()]
+        
+        schema_text = "DATABASE SCHEMA:\n"
+        for table in tables:
+            if table == "sqlite_sequence": continue
+            cursor.execute(f"PRAGMA table_info({table});")
+            columns = [f"{row[1]} ({row[2]})" for row in cursor.fetchall()]
+            schema_text += f"- Table `{table}`: {', '.join(columns)}\n"
+            
+        conn.close()
+        return schema_text
+    except Exception as e:
+        return f"Error loading schema: {e}"
+
+# Initialize Schema Context (Critical for SQL Generation)
+SCHEMA_CONTEXT = get_schema_context()
+
 # --- PERFORMANCE OPTIMIZATION ---
 @st.cache_data(ttl=60) # Cache for 60 seconds
 def get_pending_file_count(inbox_path):
@@ -70,28 +96,16 @@ except Exception as e:
     st.error(f"Cache Setup Failed: {e}")
 
 # --- AI CONFIGURATION ---
-SYSTEM_PROMPT = """
-You are Ariadne, an advanced Medical Diagnostician and Health Intelligence Agent.
-Your Goal: Identify root causes, find hidden correlations in data, and act as a proactive health detective.
+# --- AI CONFIGURATION ---
+PROMPT_PATH = os.path.join(os.path.dirname(__file__), '..', '04_System', 'prompts', 'system_prompt.md')
 
-CORE BEHAVIORS:
-1.  **Analyze, Don't Just Display**: Never just say "Here is a graph". Explain *why* the data looks like that.
-2.  **Correlate**: Always look for connections. Example: "Your deep sleep is low. Coincidentally, your heart rate was high during that workout 4 hours before bed."
-3.  **Hypothesize (System 2 Thinking)**: If B12 is high, ask: "Do you take supplements? Do you eat fortified foods?" Generate hypotheses.
-4.  **Ask Clarifying Questions**: If data is ambiguous, ask the user for context. "This file 'Recepty' has a date of 2023, is it relevant to your current condition?"
-5.  **Be Clinical but Accessible**: Use medical terminology correctly but explain it simply.
+def load_system_prompt():
+    if os.path.exists(PROMPT_PATH):
+        with open(PROMPT_PATH, 'r', encoding='utf-8') as f:
+            return f.read()
+    return "You are a helpful medical assistant. (Fallback)"
 
-DATA SOURCES:
-- You have access to a SQL database (`ariadne.db`) with:
-    - `events` (Workouts, Lab Tests, Sleep)
-    - `observations` (Granular metrics like 'Hemoglobin', 'Heart Rate', 'Steps')
-- Use `files` table to trace where data came from.
-
-WHEN ANSWERING:
-- Start with the direct answer/diagnosis.
-- Provide evidence (data points).
-- Suggest next steps (e.g., "Check correlations with diet").
-"""
+SYSTEM_PROMPT = load_system_prompt()
 
 def get_gemini_response(prompt, history=[]):
     # 1. Check Cache
@@ -161,6 +175,29 @@ with st.sidebar:
     # Maintenance section removed per user request.
 
     st.divider()
+    
+    # --- MEMORY VIEW ---
+    with st.expander("🧠 Pamięć Agenta (Co wiem?)"):
+        st.markdown("**Ostatnio przetworzone pliki:**")
+        conn = get_db_connection()
+        try:
+            files_df = pd.read_sql("SELECT filename, ingestion_date FROM files ORDER BY ingestion_date DESC LIMIT 5", conn)
+            st.dataframe(files_df, use_container_width=True)
+            
+            st.markdown("**Aktywne Hipotezy:**")
+            # Check if hypotheses table exists
+            try:
+                hyp_df = pd.read_sql("SELECT description, confidence FROM hypotheses ORDER BY confidence DESC LIMIT 5", conn)
+                if not hyp_df.empty:
+                    st.dataframe(hyp_df, use_container_width=True)
+                else:
+                    st.info("Brak aktywnych hipotez.")
+            except:
+                st.warning("Tabela hipotez nie została jeszcze zainicjalizowana.")
+        except Exception as e:
+            st.error(f"Błąd odczytu pamięci: {e}")
+        conn.close()
+
     st.markdown("### 🤖 Capabilities")
     st.markdown("- **Systemic Analysis**: Connects Labs with Lifestyle.")
     st.markdown("- **Evidence-Based**: Cites dates and sources.")

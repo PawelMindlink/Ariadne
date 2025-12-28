@@ -388,19 +388,40 @@ def run_ingestion():
 
     conn.close()
     
-    # 2. Vaccination (Empty Folder Cleanup) - The Vacuum
-    log("🧹 Vacuuming empty folders...")
+    
+    
+    # 2. Vaccination (Empty Folder Cleanup) - Two-Pass Vacuum
+    log("🧹 Vacuuming empty folders (Aggressive Mode)...")
+    
+    SYSTEM_FILES = ['.ds_store', 'desktop.ini', 'thumbs.db']
+    
+    # Walk bottom-up
     for root, dirs, files in os.walk(INBOX_DIR, topdown=False):
-        if root == INBOX_DIR: continue # Don't delete Inbox itself
-        # specialized folders check
-        if any(x in root for x in ['Quarantine', 'Review']): continue
+        if root == INBOX_DIR: continue 
+        # Skip protected
+        if any(x in root for x in ['Quarantine', 'Review', 'Archive', 'Database', 'Errors']): continue
         
         try:
-            if not os.listdir(root):
+            # Check for junk
+            all_files = os.listdir(root)
+            non_junk = [f for f in all_files if f.lower() not in SYSTEM_FILES]
+            
+            if not non_junk:
+                # Delete junk first
+                for f in all_files:
+                    try:
+                        os.remove(os.path.join(root, f))
+                    except: pass
+                
+                # Delete dir
                 os.rmdir(root)
-                log(f"Deleted empty folder: {root}")
-        except:
-            pass
+                log(f"✨ Deleted: {root}")
+        except Exception as e:
+            # Pass silently only if it's "Directory not empty" (meaning valid files exist)
+            # Log permission errors
+            if "WinError 145" not in str(e): # 145 = Dir not empty
+                # log(f"⚠️ Vacuum skipped {os.path.basename(root)}: {e}")
+                pass
 
     log(f"🏁 Done. Processed: {stats['processed']}, Quarantined: {stats['quarantined']}, Errors: {stats['errors']}")
 
