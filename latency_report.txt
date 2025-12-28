@@ -1,5 +1,0 @@
-Import Time: 1.3522s
-DB Time: 0.0010s
-Run 1 (Cold): 12.6356s
-Run 2 (Warm): 0.0003s
-Improvement: 49903.6x Faster
