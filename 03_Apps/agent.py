@@ -5,8 +5,36 @@ import os
 from google import genai
 import hashlib
 from datetime import datetime
+import toml
 
 # ... (Previous imports)
+
+# --- CONFIGURATION ---
+DB_PATH = os.path.join(os.path.dirname(__file__), '..', '02_Database', 'ariadne.db')
+
+def get_db_connection():
+    return sqlite3.connect(DB_PATH)
+
+def load_secrets():
+    secrets_path = os.path.join(os.path.dirname(__file__), '..', '.streamlit', 'secrets.toml')
+    if os.path.exists(secrets_path):
+        try:
+            return toml.load(secrets_path) 
+        except:
+             return {}
+    return {}
+
+# --- PERFORMANCE OPTIMIZATION ---
+@st.cache_data(ttl=60) # Cache for 60 seconds
+def get_pending_file_count(inbox_path):
+    pending = 0
+    # Limit depth or just strict walk
+    for root, dirs, files in os.walk(inbox_path):
+        if 'Errors' in root or 'Quarantine' in root: continue
+        for f in files:
+            if f.lower().endswith(('.pdf', '.tcx', '.json', '.csv', '.xml')):
+                pending += 1
+    return pending
 
 # --- CACHE LOGIC ---
 def setup_cache():
@@ -98,12 +126,7 @@ with st.sidebar:
     # Check pending files
     # Check pending files
     inbox_path = os.path.join(os.path.dirname(__file__), '..', '00_Inbox')
-    pending_files = 0
-    for root, dirs, files in os.walk(inbox_path):
-        if 'Errors' in root: continue
-        for f in files:
-            if f.lower().endswith(('.pdf', '.tcx', '.json', '.csv', '.xml')):
-                pending_files += 1
+    pending_files = get_pending_file_count(inbox_path)
     
     if pending_files > 0:
         st.warning(f"📝 {pending_files} files waiting to be processed.")
