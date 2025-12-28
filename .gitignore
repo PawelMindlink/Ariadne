@@ -22,3 +22,13 @@ Errors/
 # --- IDEs ---
 .vscode/
 .idea/
+# --- Temporary/Debug Data ---
+temp_debug_activity.json
+*_debug_output.txt
+*.log
+latency_report.txt
+inventory_report.txt
+scenario_results.txt
+scenario_results_v2.txt
+perf_test_output.txt
+capture_error.txt
