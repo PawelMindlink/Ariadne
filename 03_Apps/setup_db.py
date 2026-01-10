@@ -65,6 +65,32 @@ def create_schema():
     );
     """)
 
+    # Create Hypotheses Table (Agent Memory)
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS hypotheses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER DEFAULT 1,
+        description TEXT,
+        confidence FLOAT,
+        status TEXT DEFAULT 'active', -- active, confirmed, refuted
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
+    # Create Facts Table (Structured Facts extracted from conversation)
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS facts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER DEFAULT 1,
+        category TEXT, -- e.g., 'Medication', 'Lifestyle', 'Symptom'
+        key TEXT,      -- e.g., 'Supplement'
+        value TEXT,    -- e.g., 'Vitamin D'
+        confidence FLOAT DEFAULT 1.0,
+        source TEXT,   -- e.g., 'Chat', 'File: report.pdf'
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
     conn.commit()
     conn.close()
     print("Database schema initialized successfully.")
