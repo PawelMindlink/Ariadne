@@ -1,34 +1,57 @@
-# --- System/Environment ---
-desktop.ini
-Desktop.ini
-# --- User Data (SENSITIVE - DO NOT COMMIT) ---
-00_Inbox/
-01_Archive/
-02_Database/*.db
-02_Database/*.sqlite
-02_Database/*.db-journal
-
-# --- System/Environment ---
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environment Variables & Secrets
 .env
+.env.local
+config/secrets.toml
+secrets.toml
 .streamlit/secrets.toml
+
+# Databases (Local)
+*.db
+*.sqlite
+*.sqlite3
+ariadne.db
+ariadne_v2.db
+
+# Logs
+*.log
+
+# Ariadne Specific
+00_Inbox/
+01_Processing/
+01_Archive/
+02_Database/
+03_Quarantine/
+Documents for Analysis Inbox/
+desktop.ini
+data/
+output/
+debug_output/
+tests/data/
+
+# OS
 .DS_Store
-
-# --- Errors & Logs ---
-*.log
-Errors/
-
-# --- IDEs ---
-.vscode/
-.idea/
-# --- Temporary/Debug Data ---
-temp_debug_activity.json
-*_debug_output.txt
-*.log
-latency_report.txt
-inventory_report.txt
-scenario_results.txt
-scenario_results_v2.txt
-perf_test_output.txt
-capture_error.txt
+Thumbs.db
