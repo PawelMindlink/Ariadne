@@ -24,7 +24,7 @@ class Extractor:
         
         if ext == '.pdf':
             return self._extract_from_pdf(file_path)
-        elif ext in ['.txt', '.md', '.csv']:
+        elif ext in ['.txt', '.md', '.csv', '.json']:
             return self._extract_plain(file_path)
         else:
             return None, 'unsupported'

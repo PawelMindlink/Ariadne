@@ -11,7 +11,7 @@ class GraphBuilder:
     def __init__(self):
         self.conn = db.get_connection()
 
-    def insert_graph_data(self, graph_json, source_filename):
+    def insert_graph_data(self, graph_json, source_filename, file_hash=None):
         """
         Takes the JSON from Gemini and inserts it into SQLite v2.
         Using the OBSERVATION model.
@@ -20,9 +20,14 @@ class GraphBuilder:
         
         try:
             # 1. Create Source Document Node
+            doc_body = {
+                "name": source_filename, 
+                "hash": file_hash,
+                "status": "processed"
+            }
             cursor.execute(
                 "INSERT INTO nodes (type, body) VALUES (?, ?) RETURNING id",
-                ("Document", json.dumps({"name": source_filename, "status": "processed"}))
+                ("Document", json.dumps(doc_body))
             )
             doc_id = cursor.fetchone()[0]
             
@@ -91,10 +96,41 @@ def run_ingestion():
     builder = GraphBuilder()
     
     count = 0
+    # ... (inside run_ingestion loop) ...
     for file_path, filename in scanner.scan():
         print(f"Processing: {filename}...")
         
-        # 1. Extract Text
+        # 0. Calculate Hash (Digital Fingerprint)
+        file_hash = scanner.calculate_hash(file_path)
+        if not file_hash:
+            print("  -> ❌ Error calculating hash. Skipping.")
+            continue
+
+        # 1. Check for Duplicate (by Hash)
+        conn = db.get_connection()
+        existing_doc = conn.execute(
+            "SELECT id FROM nodes WHERE type='Document' AND json_extract(body, '$.hash') = ?", 
+            (file_hash,)
+        ).fetchone()
+        conn.close()
+
+        if existing_doc:
+            print(f"  -> ⚠️ Duplicate content detected (ID: {existing_doc[0]}). Skipping.")
+            # Move to Archive to clean inbox
+            target = os.path.join(Config.ARCHIVE_DIR, filename)
+            if os.path.exists(target):
+                 base, ext = os.path.splitext(filename)
+                 import time
+                 timestamp = int(time.time())
+                 target = os.path.join(Config.ARCHIVE_DIR, f"{base}_{timestamp}{ext}")
+            try:
+                shutil.move(file_path, target)
+                print("  -> Moved duplicate to Archive.")
+            except Exception as e:
+                print(f"  -> ❌ Move failed: {e}")
+            continue
+
+        # 2. Extract Text
         text, method = extractor.extract_text(file_path)
         if method != 'native':
             print(f"  -> Skipping (Method: {method}) -> Moving to Quarantine")
@@ -103,7 +139,7 @@ def run_ingestion():
             shutil.move(file_path, os.path.join(quarantine_path, filename))
             continue
             
-        # 2. AI Analysis
+        # 3. AI Analysis
         print("  -> Asking Gemini...")
         graph_data = ai.extract_graph_from_text(text, dates_hint=filename)
         
@@ -114,19 +150,28 @@ def run_ingestion():
             shutil.move(file_path, os.path.join(quarantine_path, filename))
             continue
             
-        # 3. DB Insert
-        success, doc_id = builder.insert_graph_data(graph_data, filename)
+        # 4. DB Insert
+        success, doc_id = builder.insert_graph_data(graph_data, filename, file_hash)
         
         if success:
             print(f"  -> ✅ Success! Document ID: {doc_id}")
             # Move to Archive
-            target = os.path.join(Config.ARCHIVE_DIR, filename)
-            shutil.move(file_path, target)
-            count += 1
+            try:
+                target = os.path.join(Config.ARCHIVE_DIR, filename)
+                if os.path.exists(target):
+                    base, ext = os.path.splitext(filename)
+                    import time
+                    timestamp = int(time.time())
+                    target = os.path.join(Config.ARCHIVE_DIR, f"{base}_{timestamp}{ext}")
+                shutil.move(file_path, target)
+                count += 1
+            except Exception as e:
+                print(f"  -> ❌ Move failed: {e}")
         else:
             print("  -> ❌ DB Insertion Failed")
             
     print(f"Done. Processed {count} files.")
+    return count
 
 if __name__ == "__main__":
     run_ingestion()
